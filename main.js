@@ -27,7 +27,12 @@ const stopGame = () => {
   return;
 };
 
-const startGame = (chancesLeft) => {
+const getMatchedLetters = ([...userAnswer]) => {
+  const notMatchedLetters = _.difference(userAnswer, [...getTodayWord()]);
+  return _.difference(userAnswer, notMatchedLetters).length;
+};
+
+const startGame = (chance) => {
   const userAnswer = getUserAnswer();
   const result = checkAnswer(userAnswer);
 
@@ -38,22 +43,25 @@ const startGame = (chancesLeft) => {
   }
 
   renderResult("Your Answer Was Incorrect");
+  renderResult(
+    `${getMatchedLetters(userAnswer)} letters matched with the word`
+  );
 
-  if (chancesLeft.count() === 0) {
+  if (chance.countLeft() === 0) {
     renderResult("all chances are over");
     stopGame();
     return;
   }
 };
 
-class Chances {
+class Chance {
   #chances;
 
   constructor() {
     this.#chances = 2;
   }
 
-  count() {
+  countLeft() {
     this.#chances -= 1;
     return this.#chances;
   }
@@ -61,9 +69,9 @@ class Chances {
 
 const main = () => {
   const submitButton = document.querySelector("#submit-button");
-  const chancesLeft = new Chances();
+  const chance = new Chance();
 
-  submitButton.onclick = () => startGame(chancesLeft);
+  submitButton.onclick = () => startGame(chance);
 };
 
 window.onload = main;
