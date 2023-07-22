@@ -1,8 +1,12 @@
-const checkAnswer = (userAnswer) => {
-  return userAnswer === "hello";
+const getTodayWord = () => {
+  return "hello";
 };
 
-const displayResult = (message) => {
+const checkAnswer = (userAnswer) => {
+  return userAnswer === getTodayWord();
+};
+
+const renderResult = (message) => {
   const page = document.querySelector("#page");
   const resultBox = document.createElement("div");
 
@@ -10,21 +14,56 @@ const displayResult = (message) => {
   page.appendChild(resultBox);
 };
 
-const main = () => {
+const getUserAnswer = () => {
   const answerBox = document.querySelector("#answer-box");
+  const answer = answerBox.value;
+  answerBox.value = "";
+  return answer;
+};
+
+const stopGame = () => {
   const submitButton = document.querySelector("#submit-button");
+  submitButton.setAttribute("disabled", "true");
+  return;
+};
 
-  submitButton.onclick = () => {
-    const userAnswer = answerBox.value;
-    answerBox.value = "";
-    const result = checkAnswer(userAnswer);
+const startGame = (chancesLeft) => {
+  const userAnswer = getUserAnswer();
+  const result = checkAnswer(userAnswer);
 
-    if (result) {
-      displayResult("Your answer was Correct");
-      return;
-    }
-    displayResult("Your Answer Was Incorrect");
-  };
+  if (result) {
+    renderResult("Your answer Was Correct");
+    stopGame();
+    return;
+  }
+
+  renderResult("Your Answer Was Incorrect");
+
+  if (chancesLeft.count() === 0) {
+    renderResult("all chances are over");
+    stopGame();
+    return;
+  }
+};
+
+class Chances {
+  #chances;
+
+  constructor() {
+    this.#chances = 2;
+  }
+
+  count() {
+    this.#chances -= 1;
+    return this.#chances;
+  }
+}
+
+const main = () => {
+  const submitButton = document.querySelector("#submit-button");
+  const chancesLeft = new Chances();
+
+  submitButton.onclick = () => startGame(chancesLeft);
 };
 
 window.onload = main;
