@@ -8,7 +8,7 @@ class WordleView {
     this.#page = page;
     this.#submitButton = submitButton;
     this.#guessContainer = guessContainer;
-    this.#stats = [];
+    this.#stats;
   }
 
   #render(message) {
@@ -39,10 +39,12 @@ class WordleView {
 
   #renderIncorrectGuess() {
     this.#renderLetters();
+    this.#render(`${this.#stats.letterPresents} letters presents`);
     return;
   }
 
   renderResult(stats) {
+    console.log(stats);
     this.#stats = stats;
 
     if (this.#stats.hasWon) {

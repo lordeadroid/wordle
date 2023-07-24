@@ -24,13 +24,11 @@ class WordleController {
   #inputController;
   #wordleView;
   #wordle;
-  #chances;
 
-  constructor(inputController, wordleView, wordle, chances) {
+  constructor(inputController, wordleView, wordle) {
     this.#inputController = inputController;
     this.#wordleView = wordleView;
     this.#wordle = wordle;
-    this.#chances = chances;
   }
 
   onSubmitButtonClick(guess) {

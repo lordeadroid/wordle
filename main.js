@@ -1,20 +1,3 @@
-class Chances {
-  #chances;
-
-  constructor(chances) {
-    this.#chances = chances;
-  }
-
-  #updateCount() {
-    this.#chances -= 1;
-  }
-
-  countLeft() {
-    this.#updateCount();
-    return this.#chances;
-  }
-}
-
 class SecretWord {
   #word;
 
@@ -30,7 +13,7 @@ class SecretWord {
     return guess.map((letter, index) => {
       const stats = {};
       stats.letter = letter;
-      stats.includes = this.isEqual(letter);
+      stats.includes = this.#word.includes(letter);
       stats.correctPosition = this.#word[index] === letter;
 
       return stats;
@@ -43,6 +26,7 @@ class Wordle {
   #letters;
   #stats;
   #hasWon;
+  #letterPresents;
 
   constructor(secretWord) {
     this.#secretWord = secretWord;
@@ -52,6 +36,10 @@ class Wordle {
     this.#letters = [...guess];
     this.#stats = this.#secretWord.generateStats(guess);
     this.#hasWon = this.#secretWord.isEqual(guess);
+    this.#letterPresents = this.#stats.reduce((count, letter) => {
+      if (letter.includes) count++;
+      return count;
+    }, 0);
   }
 
   status() {
@@ -59,6 +47,7 @@ class Wordle {
       letters: this.#letters,
       hasWon: this.#hasWon,
       stats: this.#stats,
+      letterPresents: this.#letterPresents,
     };
   }
 }
@@ -69,7 +58,6 @@ const main = () => {
   const answerBox = document.querySelector("#answer-box");
   const guessContainer = document.querySelector("#guess-container");
 
-  const chances = new Chances(1);
   const secretWord = new SecretWord("HELLO");
   const wordle = new Wordle(secretWord);
   const wordleView = new WordleView(page, submitButton, guessContainer);
@@ -78,8 +66,7 @@ const main = () => {
   const wordleController = new WordleController(
     inputController,
     wordleView,
-    wordle,
-    chances
+    wordle
   );
   wordleController.start();
 };
