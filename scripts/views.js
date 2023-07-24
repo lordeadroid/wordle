@@ -32,7 +32,7 @@ class WordleView {
     const guessElements = document.createElement("div");
     guessElements.classList.add("guess");
 
-    this.#stats.stats.forEach((letterStat) => {
+    this.#stats.letterStats.forEach((letterStat) => {
       const letterElement = document.createElement("div");
       letterElement.innerText = letterStat.letter;
       letterElement.classList.add("letter");

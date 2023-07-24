@@ -10,32 +10,68 @@ body {
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
+#page {
+  width: 50%;
+  margin: 0 auto;
+}
+
 h1 {
   font-size: 5em;
   color: teal;
   text-align: center;
+  margin-bottom: 80px;
+}
+
+#input-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+#answer-box {
+  font-size: 1em;
+  height: 50px;
+  width: 500px;
+}
+
+#submit-button {
+  font-size: 1em;
+  height: 50px;
+  width: 150px;
+}
+
+#guess-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-content: center;
+  gap: 20px;
 }
 
 .guess {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  gap: 10px;
+  gap: 20px;
 }
 
 .letter {
+  height: 60px;
+  width: 60px;
+  font-size: 1.5em;
+  font-weight: 700;
+  border-radius: 5px;
+  color: white;
+  background-color: rgb(120, 124, 126);
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: gray;
-  height: 50px;
-  width: 50px;
 }
 
 .green {
-  background-color: green;
+  background-color: rgb(107, 169, 100);
 }
 
 .yellow {
-  background-color: yellow;
+  background-color: rgb(201, 180, 88);
 }

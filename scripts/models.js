@@ -56,7 +56,7 @@ class Wordle {
     return {
       letters: this.#letters,
       hasWon: this.#hasWon,
-      stats: this.#stats,
+      letterStats: this.#stats,
       letterPresents: this.#letterPresents,
       chancesLeft: this.#chances - this.#guesses.length,
       score: this.#score,
