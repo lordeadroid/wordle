@@ -3,7 +3,6 @@ class WordleView {
   #submitButton;
   #guessContainer;
   #stats;
-  #guessElements;
 
   constructor(page, submitButton, guessContainer) {
     this.#page = page;
