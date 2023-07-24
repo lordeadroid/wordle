@@ -11,12 +11,11 @@ class SecretWord {
 
   generateStats([...guess]) {
     return guess.map((letter, index) => {
-      const stats = {};
-      stats.letter = letter;
-      stats.includes = this.#word.includes(letter);
-      stats.correctPosition = this.#word[index] === letter;
-
-      return stats;
+      return {
+        letter: letter,
+        includes: this.#word.includes(letter),
+        correctPosition: this.#word[index] === letter,
+      };
     });
   }
 }
@@ -40,7 +39,6 @@ class Wordle {
 
   play(guess) {
     this.#guesses.push(guess);
-    this.#letters = [...guess];
     this.#stats = this.#secretWord.generateStats(guess);
     this.#hasWon = this.#secretWord.isEqual(guess);
     this.#score = (this.#chances - this.#guesses.length + 1) * 10;

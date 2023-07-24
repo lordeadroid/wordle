@@ -34,7 +34,7 @@ class WordleController {
   onSubmitButtonClick(guess) {
     this.#wordle.play(guess);
     const stats = this.#wordle.status();
-    this.#wordleView.renderResult(stats);
+    this.#wordleView.render(stats);
   }
 
   start() {

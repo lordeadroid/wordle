@@ -1,84 +1,70 @@
 class WordleView {
   #page;
   #submitButton;
-  #guessContainer;
+  #guessWordContainer;
   #stats;
 
-  constructor(page, submitButton, guessContainer) {
+  constructor(page, submitButton, guessWordContainer) {
     this.#page = page;
     this.#submitButton = submitButton;
-    this.#guessContainer = guessContainer;
+    this.#guessWordContainer = guessWordContainer;
     this.#stats;
   }
 
-  #render(message) {
+  #renderMessage(message) {
     const resultBox = document.createElement("div");
     resultBox.innerText = message;
     this.#page.appendChild(resultBox);
   }
 
-  #appendHint(letterElement, letterStat) {
+  #addHint(letterElement, letterStat) {
     if (letterStat.correctPosition) {
       letterElement.classList.add("green");
       return;
     }
+
     if (letterStat.includes) {
       letterElement.classList.add("yellow");
-      return;
     }
   }
 
-  #createLettersElements() {
-    const guessElements = document.createElement("div");
-    guessElements.classList.add("guess");
+  #createLetterElement(letter) {
+    const letterElement = document.createElement("div");
+    letterElement.innerText = letter;
+    letterElement.classList.add("letter");
+
+    return letterElement;
+  }
+
+  #renderLetters() {
+    const guessedLetterElements = document.createElement("div");
+    guessedLetterElements.classList.add("guess");
 
     this.#stats.letterStats.forEach((letterStat) => {
-      const letterElement = document.createElement("div");
-      letterElement.innerText = letterStat.letter;
-      letterElement.classList.add("letter");
-      this.#appendHint(letterElement, letterStat);
-      guessElements.appendChild(letterElement);
+      const letterElement = this.#createLetterElement(letterStat.letter);
+      this.#addHint(letterElement, letterStat);
+      guessedLetterElements.appendChild(letterElement);
     });
 
-    this.#guessContainer.appendChild(guessElements);
+    this.#guessWordContainer.appendChild(guessedLetterElements);
   }
 
-  #renderCorrectGuess() {
-    this.#render(`Your Guess Is Right\nScore: ${this.#stats.score}`);
-    this.#createLettersElements();
-    this.#endGame();
-    return;
+  #endGame() {
+    this.#renderMessage(`Score: ${this.#stats.score}`);
+    this.#submitButton.setAttribute("disabled", "true");
   }
 
-  #renderIncorrectGuess() {
-    this.#createLettersElements();
-    return;
-  }
-
-  renderResult(stats) {
+  render(stats) {
     this.#stats = stats;
+    this.#renderLetters();
 
     if (this.#stats.hasWon) {
-      this.#renderCorrectGuess();
-      return;
-    }
-
-    if (this.#stats.chancesLeft <= 0) {
-      this.#renderIncorrectGuess();
       this.#endGame();
       return;
     }
 
-    this.#renderIncorrectGuess();
-    return;
-  }
-
-  #endGame() {
-    this.#render("Game Over");
-    this.#disableSaveButton();
-  }
-
-  #disableSaveButton() {
-    this.#submitButton.setAttribute("disabled", "true");
+    if (this.#stats.chancesLeft <= 0) {
+      this.#endGame();
+    }
   }
 }
