@@ -18,14 +18,26 @@ class WordleView {
     this.#page.appendChild(resultBox);
   }
 
+  #appendHint(letterElement, letterStat) {
+    if (letterStat.correctPosition) {
+      letterElement.classList.add("green");
+      return;
+    }
+    if (letterStat.includes) {
+      letterElement.classList.add("yellow");
+      return;
+    }
+  }
+
   #createLettersElements() {
     const guessElements = document.createElement("div");
     guessElements.classList.add("guess");
 
-    this.#stats.letters.forEach((letter) => {
+    this.#stats.stats.forEach((letterStat) => {
       const letterElement = document.createElement("div");
-      letterElement.innerText = letter;
-      letterElement.classList.add("letter", "green");
+      letterElement.innerText = letterStat.letter;
+      letterElement.classList.add("letter");
+      this.#appendHint(letterElement, letterStat);
       guessElements.appendChild(letterElement);
     });
 
@@ -35,21 +47,21 @@ class WordleView {
   #renderCorrectGuess() {
     this.#render("Your Guess Is Right");
     this.#createLettersElements();
-    this.#renderHint();
     this.#endGame();
     return;
   }
 
-  #renderHint() {}
-
   #renderIncorrectGuess() {
     this.#createLettersElements();
-    this.#renderHint();
     return;
   }
 
   renderResult(stats) {
     this.#stats = stats;
+    if (stats.countLeft === 0) {
+      this.#endGame();
+      return;
+    }
 
     if (this.#stats.hasWon) {
       this.#renderCorrectGuess();
