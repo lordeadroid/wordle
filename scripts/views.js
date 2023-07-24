@@ -45,7 +45,7 @@ class WordleView {
   }
 
   #renderCorrectGuess() {
-    this.#render("Your Guess Is Right");
+    this.#render(`Your Guess Is Right\nScore: ${this.#stats.score}`);
     this.#createLettersElements();
     this.#endGame();
     return;
@@ -58,15 +58,18 @@ class WordleView {
 
   renderResult(stats) {
     this.#stats = stats;
-    if (stats.countLeft === 0) {
-      this.#endGame();
-      return;
-    }
 
     if (this.#stats.hasWon) {
       this.#renderCorrectGuess();
       return;
     }
+
+    if (this.#stats.chancesLeft <= 0) {
+      this.#renderIncorrectGuess();
+      this.#endGame();
+      return;
+    }
+
     this.#renderIncorrectGuess();
     return;
   }

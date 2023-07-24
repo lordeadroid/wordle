@@ -29,11 +29,13 @@ class Wordle {
   #stats;
   #hasWon;
   #letterPresents;
+  #score;
 
   constructor(secretWord, chances) {
     this.#secretWord = secretWord;
     this.#chances = chances;
     this.#guesses = [];
+    this.#score;
   }
 
   play(guess) {
@@ -41,6 +43,7 @@ class Wordle {
     this.#letters = [...guess];
     this.#stats = this.#secretWord.generateStats(guess);
     this.#hasWon = this.#secretWord.isEqual(guess);
+    this.#score = (this.#chances - this.#guesses.length + 1) * 10;
     this.#letterPresents = this.#stats.reduce((count, letter) => {
       if (letter.includes) {
         count += 1;
@@ -56,6 +59,7 @@ class Wordle {
       stats: this.#stats,
       letterPresents: this.#letterPresents,
       chancesLeft: this.#chances - this.#guesses.length,
+      score: this.#score,
     };
   }
 }
@@ -67,7 +71,7 @@ const main = () => {
   const guessContainer = document.querySelector("#guess-container");
 
   const secretWord = new SecretWord("HELLO");
-  const wordle = new Wordle(secretWord, 2);
+  const wordle = new Wordle(secretWord, 5);
   const wordleView = new WordleView(page, submitButton, guessContainer);
 
   const inputController = new InputController(submitButton, answerBox);
