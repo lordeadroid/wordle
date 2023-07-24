@@ -11,19 +11,49 @@ class Chances {
   }
 }
 
-const getTodayWord = () => {
-  return "hello";
-};
+class Wordle {
+  #word;
+
+  constructor(word) {
+    this.#word = word;
+  }
+
+  noOfMatchedLetters([...guess]) {
+    const answer = [...this.#word];
+    const matchedLetters = [];
+
+    guess.forEach((char) => {
+      const index = answer.indexOf(char);
+      if (index !== -1) {
+        answer.splice(index, 1);
+        matchedLetters.push(char);
+      }
+    });
+
+    return matchedLetters.length;
+  }
+
+  isGuessCorrect(guess) {
+    return this.#word === guess;
+  }
+}
 
 const main = () => {
+  const page = document.querySelector("#page");
   const submitButton = document.querySelector("#submit-button");
   const answerBox = document.querySelector("#answer-box");
 
-  const chances = new Chances(2);
-  const wordleView = new WordleView(chances, getTodayWord());
+  const chances = new Chances(1);
+  const wordle = new Wordle("HELLO");
+  const wordleView = new WordleView(page, submitButton);
 
   const inputController = new InputController(submitButton, answerBox);
-  const wordleController = new WordleController(inputController, wordleView);
+  const wordleController = new WordleController(
+    inputController,
+    wordleView,
+    wordle,
+    chances
+  );
   wordleController.start();
 };
 

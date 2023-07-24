@@ -8,14 +8,14 @@ class InputController {
   }
 
   #readAnswer() {
-    const answer = this.#answerBox.value;
+    const answer = this.#answerBox.value.toUpperCase();
     this.#answerBox.value = "";
     return answer;
   }
 
-  onSubmitButtonClick(takeInput) {
+  onSubmitButtonClick(onReadInput) {
     this.#submitButton.onclick = () => {
-      takeInput(this.#readAnswer());
+      onReadInput(this.#readAnswer());
     };
   }
 }
@@ -23,19 +23,34 @@ class InputController {
 class WordleController {
   #inputController;
   #wordleView;
+  #wordle;
+  #chances;
 
-  constructor(inputController, wordleView) {
+  constructor(inputController, wordleView, wordle, chances) {
     this.#inputController = inputController;
     this.#wordleView = wordleView;
+    this.#wordle = wordle;
+    this.#chances = chances;
   }
 
-  #takeInput(userAnswer) {
-    this.#wordleView.render(userAnswer);
+  #readInput(guess) {
+    if (this.#wordle.isGuessCorrect(guess)) {
+      this.#wordleView.renderCorrectGuess();
+      return;
+    }
+
+    const matchedLetters = this.#wordle.noOfMatchedLetters(guess);
+    this.#wordleView.renderIncorrectGuess(matchedLetters);
+
+    if (this.#chances.countLeft() < 0) {
+      this.#wordleView.endGame();
+      return;
+    }
   }
 
   start() {
     this.#inputController.onSubmitButtonClick((userAnswer) => {
-      this.#takeInput(userAnswer);
+      this.#readInput(userAnswer);
     });
   }
 }
