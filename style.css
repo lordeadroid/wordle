@@ -15,3 +15,24 @@ h1 {
   color: teal;
   text-align: center;
 }
+
+.guess {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 10px;
+  
+}
+
+.letter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: gray;
+  height: 50px;
+  width: 50px;
+}
+
+.green {
+  background-color: green;
+}

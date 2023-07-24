@@ -3,6 +3,7 @@ class WordleView {
   #submitButton;
   #guessContainer;
   #stats;
+  #guessElements;
 
   constructor(page, submitButton, guessContainer) {
     this.#page = page;
@@ -17,34 +18,37 @@ class WordleView {
     this.#page.appendChild(resultBox);
   }
 
-  #renderLetters() {
-    const guessElement = document.createElement("div");
-    guessElement.classList.add("guess");
+  #createLettersElements() {
+    const guessElements = document.createElement("div");
+    guessElements.classList.add("guess");
 
     this.#stats.letters.forEach((letter) => {
       const letterElement = document.createElement("div");
       letterElement.innerText = letter;
-      guessElement.appendChild(letterElement);
+      letterElement.classList.add("letter", "green");
+      guessElements.appendChild(letterElement);
     });
 
-    this.#guessContainer.appendChild(guessElement);
+    this.#guessContainer.appendChild(guessElements);
   }
 
   #renderCorrectGuess() {
     this.#render("Your Guess Is Right");
-    this.#renderLetters();
+    this.#createLettersElements();
+    this.#renderHint();
     this.#endGame();
     return;
   }
 
+  #renderHint() {}
+
   #renderIncorrectGuess() {
-    this.#renderLetters();
-    this.#render(`${this.#stats.letterPresents} letters presents`);
+    this.#createLettersElements();
+    this.#renderHint();
     return;
   }
 
   renderResult(stats) {
-    console.log(stats);
     this.#stats = stats;
 
     if (this.#stats.hasWon) {

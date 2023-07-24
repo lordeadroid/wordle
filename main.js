@@ -37,7 +37,9 @@ class Wordle {
     this.#stats = this.#secretWord.generateStats(guess);
     this.#hasWon = this.#secretWord.isEqual(guess);
     this.#letterPresents = this.#stats.reduce((count, letter) => {
-      if (letter.includes) count++;
+      if (letter.includes) {
+        count += 1;
+      }
       return count;
     }, 0);
   }
