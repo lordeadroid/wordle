@@ -1,32 +1,60 @@
 class WordleView {
   #page;
   #submitButton;
+  #guessContainer;
+  #stats;
 
-  constructor(page, submitButton) {
+  constructor(page, submitButton, guessContainer) {
     this.#page = page;
     this.#submitButton = submitButton;
+    this.#guessContainer = guessContainer;
+    this.#stats = [];
   }
 
-  #renderResult(message) {
+  #render(message) {
     const resultBox = document.createElement("div");
     resultBox.innerText = message;
     this.#page.appendChild(resultBox);
   }
 
-  renderCorrectGuess() {
-    this.#renderResult("Your Guess Is Right");
-    this.#disableSaveButton();
+  #renderLetters() {
+    const guessElement = document.createElement("div");
+    guessElement.classList.add("guess");
+
+    this.#stats.letters.forEach((letter) => {
+      const letterElement = document.createElement("div");
+      letterElement.innerText = letter;
+      guessElement.appendChild(letterElement);
+    });
+
+    this.#guessContainer.appendChild(guessElement);
+  }
+
+  #renderCorrectGuess() {
+    this.#render("Your Guess Is Right");
+    this.#renderLetters();
+    this.#endGame();
     return;
   }
 
-  renderIncorrectGuess(matchedLetters) {
-    this.#renderResult("Your Guess Is Wrong");
-    this.#renderResult(`${matchedLetters} Letters Matched`);
+  #renderIncorrectGuess() {
+    this.#renderLetters();
     return;
   }
 
-  endGame() {
-    this.#renderResult("Game Over");
+  renderResult(stats) {
+    this.#stats = stats;
+
+    if (this.#stats.hasWon) {
+      this.#renderCorrectGuess();
+      return;
+    }
+    this.#renderIncorrectGuess();
+    return;
+  }
+
+  #endGame() {
+    this.#render("Game Over");
     this.#disableSaveButton();
   }
 

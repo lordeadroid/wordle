@@ -13,9 +13,9 @@ class InputController {
     return answer;
   }
 
-  onSubmitButtonClick(onReadInput) {
+  start(onSubmitButtonClick) {
     this.#submitButton.onclick = () => {
-      onReadInput(this.#readAnswer());
+      onSubmitButtonClick(this.#readAnswer());
     };
   }
 }
@@ -33,24 +33,15 @@ class WordleController {
     this.#chances = chances;
   }
 
-  #readInput(guess) {
-    if (this.#wordle.isGuessCorrect(guess)) {
-      this.#wordleView.renderCorrectGuess();
-      return;
-    }
-
-    const matchedLetters = this.#wordle.noOfMatchedLetters(guess);
-    this.#wordleView.renderIncorrectGuess(matchedLetters);
-
-    if (this.#chances.countLeft() < 0) {
-      this.#wordleView.endGame();
-      return;
-    }
+  onSubmitButtonClick(guess) {
+    this.#wordle.play(guess);
+    const stats = this.#wordle.status();
+    this.#wordleView.renderResult(stats);
   }
 
   start() {
-    this.#inputController.onSubmitButtonClick((userAnswer) => {
-      this.#readInput(userAnswer);
+    this.#inputController.start((userAnswer) => {
+      this.onSubmitButtonClick(userAnswer);
     });
   }
 }
