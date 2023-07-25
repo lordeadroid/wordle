@@ -2,20 +2,17 @@ class InputController {
   #submitButton;
   #answerBox;
 
-  constructor(submitButton, answerBox) {
-    this.#submitButton = submitButton;
+  constructor(answerBox) {
     this.#answerBox = answerBox;
   }
 
-  #readAnswer() {
-    const answer = this.#answerBox.value.toUpperCase();
-    this.#answerBox.value = "";
-    return answer;
-  }
-
-  start(onSubmitButtonClick) {
-    this.#submitButton.onclick = () => {
-      onSubmitButtonClick(this.#readAnswer());
+  start(onEnter) {
+    this.#answerBox.onkeydown = (event) => {
+      if (event.code === "Enter") {
+        const guess = event.target.value.toUpperCase();
+        event.target.value = "";
+        onEnter(guess);
+      }
     };
   }
 }
@@ -31,7 +28,7 @@ class WordleController {
     this.#wordle = wordle;
   }
 
-  onSubmitButtonClick(guess) {
+  onEnter(guess) {
     this.#wordle.play(guess);
     const stats = this.#wordle.status();
     this.#wordleView.render(stats);
@@ -39,7 +36,7 @@ class WordleController {
 
   start() {
     this.#inputController.start((userAnswer) => {
-      this.onSubmitButtonClick(userAnswer);
+      this.onEnter(userAnswer);
     });
   }
 }

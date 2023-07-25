@@ -1,12 +1,12 @@
 class WordleView {
   #page;
-  #submitButton;
+  #answerBox;
   #guessWordContainer;
   #stats;
 
-  constructor(page, submitButton, guessWordContainer) {
+  constructor(page, answerBox, guessWordContainer) {
     this.#page = page;
-    this.#submitButton = submitButton;
+    this.#answerBox = answerBox;
     this.#guessWordContainer = guessWordContainer;
     this.#stats;
   }
@@ -51,7 +51,7 @@ class WordleView {
 
   #endGame() {
     this.#renderMessage(`Score: ${this.#stats.score}`);
-    this.#submitButton.setAttribute("disabled", "true");
+    this.#answerBox.setAttribute("disabled", "true");
   }
 
   render(stats) {
