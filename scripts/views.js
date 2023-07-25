@@ -1,18 +1,16 @@
 class WordleView {
   #page;
-  #answerBox;
   #guessWordContainer;
 
-  constructor(page, answerBox, guessWordContainer) {
+  constructor(page, guessWordContainer) {
     this.#page = page;
-    this.#answerBox = answerBox;
     this.#guessWordContainer = guessWordContainer;
   }
 
-  #renderMessage(message) {
+  #renderEndGame(stats) {
     const resultBox = document.createElement("div");
     resultBox.id = "result-box";
-    resultBox.innerText = message;
+    resultBox.innerText = `Word: ${stats.secretWord}\nScore: ${stats.score}`;
     this.#page.appendChild(resultBox);
   }
 
@@ -48,17 +46,17 @@ class WordleView {
     this.#guessWordContainer.appendChild(guessedLetterElements);
   }
 
-  #endGame(stats) {
-    this.#renderMessage(`Score: ${stats.score}`);
-    this.#answerBox.setAttribute("disabled", "true");
+  #renderPreviousState(state) {
+    const previousState = document.querySelector("#previous-state");
+    previousState.innerText = `${state.word}\n${state.score}`;
   }
 
-  render(stats) {
+  render(stats, previousState) {
     this.#renderLetters(stats);
+    this.#renderPreviousState(previousState);
 
     if (stats.isGameOver) {
-      this.#endGame(stats);
-      return;
+      this.#renderEndGame(stats);
     }
   }
 }

@@ -10,9 +10,14 @@ class InputController {
       if (event.code === "Enter") {
         const guess = event.target.value.toUpperCase();
         event.target.value = "";
+        if (guess.length !== 5) return;
         onEnter(guess);
       }
     };
+  }
+
+  stop() {
+    this.#answerBox.setAttribute("disabled", "true");
   }
 }
 
@@ -20,22 +25,36 @@ class WordleController {
   #inputController;
   #wordleView;
   #wordle;
+  #wordleStorage;
 
-  constructor(inputController, wordleView, wordle) {
+  constructor(inputController, wordleView, wordle, wordleStorage) {
     this.#inputController = inputController;
     this.#wordleView = wordleView;
     this.#wordle = wordle;
+    this.#wordleStorage = wordleStorage;
   }
 
-  onEnter(guess) {
+  #onEnter(guess) {
     this.#wordle.play(guess);
     const stats = this.#wordle.status();
-    this.#wordleView.render(stats);
+
+    const previousState = {
+      word: this.#wordleStorage.getWord(),
+      score: this.#wordleStorage.getScore(),
+    };
+
+    if (stats.isGameOver) {
+      this.#inputController.stop();
+      this.#wordleStorage.addWord(stats.secretWord);
+      this.#wordleStorage.addScore(stats.score);
+    }
+
+    this.#wordleView.render(stats, previousState);
   }
 
   start() {
     this.#inputController.start((userAnswer) => {
-      this.onEnter(userAnswer);
+      this.#onEnter(userAnswer);
     });
   }
 }

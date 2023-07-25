@@ -42,6 +42,10 @@ class SecretWord {
 
     return stats;
   }
+
+  get word() {
+    return this.#word;
+  }
 }
 
 class Wordle {
@@ -51,13 +55,13 @@ class Wordle {
   #stats;
   #hasWon;
   #score;
-  #isChancesLeft;
+  #AreChancesLeft;
 
   constructor(secretWord, chances) {
     this.#secretWord = secretWord;
     this.#chances = chances;
     this.#guesses = [];
-    this.#score;
+    this.#score = 0;
   }
 
   play(guess) {
@@ -65,13 +69,14 @@ class Wordle {
     this.#stats = this.#secretWord.generateStats(guess);
     this.#hasWon = this.#secretWord.isEqual(guess);
     this.#score = (this.#chances - this.#guesses.length + 1) * 10;
-    this.#isChancesLeft = this.#chances - this.#guesses.length === 0;
+    this.#AreChancesLeft = this.#chances - this.#guesses.length === 0;
   }
 
   status() {
     return {
+      secretWord: this.#secretWord.word,
       letterStats: this.#stats,
-      isGameOver: this.#hasWon || this.#isChancesLeft,
+      isGameOver: this.#hasWon || this.#AreChancesLeft,
       score: this.#score,
     };
   }
