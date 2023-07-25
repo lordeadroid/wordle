@@ -1,5 +1,4 @@
 class InputController {
-  #submitButton;
   #answerBox;
 
   constructor(answerBox) {

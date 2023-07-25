@@ -9,26 +9,49 @@ class SecretWord {
     return this.#word === guess;
   }
 
+  #getWordFrequency() {
+    return [...this.#word].reduce((frequency, letter) => {
+      return { ...frequency, [letter]: frequency[letter] + 1 || 1 };
+    }, {});
+  }
+
   generateStats([...guess]) {
-    return guess.map((letter, index) => {
-      return {
+    const wordFrequency = this.#getWordFrequency();
+
+    const stats = guess.map((letter, index) => {
+      const letterStats = {
         letter: letter,
-        includes: this.#word.includes(letter),
-        correctPosition: this.#word[index] === letter,
+        correctPosition: false,
+        includes: false,
       };
+
+      if (letter === this.#word[index]) {
+        letterStats.correctPosition = true;
+        wordFrequency[letter] -= 1;
+      }
+
+      return letterStats;
     });
+
+    stats.forEach((letterStats) => {
+      if (wordFrequency[letterStats.letter] > 0) {
+        letterStats.includes = true;
+        wordFrequency[letterStats.letter] -= 1;
+      }
+    });
+
+    return stats;
   }
 }
 
 class Wordle {
   #secretWord;
   #guesses;
-  #letters;
   #chances;
   #stats;
   #hasWon;
-  #letterPresents;
   #score;
+  #isChancesLeft;
 
   constructor(secretWord, chances) {
     this.#secretWord = secretWord;
@@ -42,21 +65,13 @@ class Wordle {
     this.#stats = this.#secretWord.generateStats(guess);
     this.#hasWon = this.#secretWord.isEqual(guess);
     this.#score = (this.#chances - this.#guesses.length + 1) * 10;
-    this.#letterPresents = this.#stats.reduce((count, letter) => {
-      if (letter.includes) {
-        count += 1;
-      }
-      return count;
-    }, 0);
+    this.#isChancesLeft = this.#chances - this.#guesses.length === 0;
   }
 
   status() {
     return {
-      letters: this.#letters,
-      hasWon: this.#hasWon,
       letterStats: this.#stats,
-      letterPresents: this.#letterPresents,
-      chancesLeft: this.#chances - this.#guesses.length,
+      isGameOver: this.#hasWon || this.#isChancesLeft,
       score: this.#score,
     };
   }

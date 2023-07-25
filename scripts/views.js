@@ -2,17 +2,16 @@ class WordleView {
   #page;
   #answerBox;
   #guessWordContainer;
-  #stats;
 
   constructor(page, answerBox, guessWordContainer) {
     this.#page = page;
     this.#answerBox = answerBox;
     this.#guessWordContainer = guessWordContainer;
-    this.#stats;
   }
 
   #renderMessage(message) {
     const resultBox = document.createElement("div");
+    resultBox.id = "result-box";
     resultBox.innerText = message;
     this.#page.appendChild(resultBox);
   }
@@ -36,11 +35,11 @@ class WordleView {
     return letterElement;
   }
 
-  #renderLetters() {
+  #renderLetters(stats) {
     const guessedLetterElements = document.createElement("div");
     guessedLetterElements.classList.add("guess");
 
-    this.#stats.letterStats.forEach((letterStat) => {
+    stats.letterStats.forEach((letterStat) => {
       const letterElement = this.#createLetterElement(letterStat.letter);
       this.#addHint(letterElement, letterStat);
       guessedLetterElements.appendChild(letterElement);
@@ -49,22 +48,17 @@ class WordleView {
     this.#guessWordContainer.appendChild(guessedLetterElements);
   }
 
-  #endGame() {
-    this.#renderMessage(`Score: ${this.#stats.score}`);
+  #endGame(stats) {
+    this.#renderMessage(`Score: ${stats.score}`);
     this.#answerBox.setAttribute("disabled", "true");
   }
 
   render(stats) {
-    this.#stats = stats;
-    this.#renderLetters();
+    this.#renderLetters(stats);
 
-    if (this.#stats.hasWon) {
-      this.#endGame();
+    if (stats.isGameOver) {
+      this.#endGame(stats);
       return;
-    }
-
-    if (this.#stats.chancesLeft <= 0) {
-      this.#endGame();
     }
   }
 }
