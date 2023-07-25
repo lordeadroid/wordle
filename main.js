@@ -30,7 +30,7 @@ class WordleStorage {
 const main = () => {
   const page = document.querySelector("#page");
   const answerBox = document.querySelector("#answer-box");
-  const guessContainer = document.querySelector("#guess-container");
+  const guessContainer = document.querySelector("#board");
 
   const secretWord = new SecretWord(getRandomWord());
   const wordle = new Wordle(secretWord, 6);

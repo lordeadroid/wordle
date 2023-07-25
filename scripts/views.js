@@ -7,10 +7,10 @@ class WordleView {
     this.#guessWordContainer = guessWordContainer;
   }
 
-  #renderEndGame(stats) {
+  #renderGameStats(stats) {
     const resultBox = document.createElement("div");
     resultBox.id = "result-box";
-    resultBox.innerText = `Word: ${stats.secretWord}\nScore: ${stats.score}`;
+    resultBox.innerText = `Score: ${stats.score}`;
     this.#page.appendChild(resultBox);
   }
 
@@ -28,14 +28,14 @@ class WordleView {
   #createLetterElement(letter) {
     const letterElement = document.createElement("div");
     letterElement.innerText = letter;
-    letterElement.classList.add("letter");
+    letterElement.classList.add("tile");
 
     return letterElement;
   }
 
   #renderLetters(stats) {
     const guessedLetterElements = document.createElement("div");
-    guessedLetterElements.classList.add("guess");
+    guessedLetterElements.classList.add("row");
 
     stats.letterStats.forEach((letterStat) => {
       const letterElement = this.#createLetterElement(letterStat.letter);
@@ -47,8 +47,8 @@ class WordleView {
   }
 
   #renderPreviousState(state) {
-    const previousState = document.querySelector("#previous-state");
-    previousState.innerText = `${state.word}\n${state.score}`;
+    const previousState = document.querySelector("#game-stats");
+    previousState.innerText = `Last Word: ${state.word} Score: ${state.score}`;
   }
 
   render(stats, previousState) {
@@ -56,7 +56,7 @@ class WordleView {
     this.#renderPreviousState(previousState);
 
     if (stats.isGameOver) {
-      this.#renderEndGame(stats);
+      this.#renderGameStats(stats);
     }
   }
 }
