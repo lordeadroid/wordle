@@ -46,14 +46,14 @@ class WordleView {
     this.#guessWordContainer.appendChild(guessedLetterElements);
   }
 
-  #renderPreviousState(state) {
+  #renderPreviousStats(state) {
     const previousState = document.querySelector("#game-stats");
     previousState.innerText = `Last Word: ${state.word} Score: ${state.score}`;
   }
 
-  render(stats, previousState) {
+  render(stats, previousStats) {
     this.#renderLetters(stats);
-    this.#renderPreviousState(previousState);
+    this.#renderPreviousStats(previousStats);
 
     if (stats.isGameOver) {
       this.#renderGameStats(stats);

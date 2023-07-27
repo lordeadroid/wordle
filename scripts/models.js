@@ -34,7 +34,10 @@ class SecretWord {
     });
 
     stats.forEach((letterStats) => {
-      if (wordFrequency[letterStats.letter] > 0) {
+      if (
+        wordFrequency[letterStats.letter] > 0 &&
+        !letterStats.correctPosition
+      ) {
         letterStats.includes = true;
         wordFrequency[letterStats.letter] -= 1;
       }

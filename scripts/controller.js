@@ -38,7 +38,7 @@ class WordleController {
     this.#wordle.play(guess);
     const stats = this.#wordle.status();
 
-    const previousState = {
+    const previousStats = {
       word: this.#wordleStorage.getWord(),
       score: this.#wordleStorage.getScore(),
     };
@@ -49,7 +49,7 @@ class WordleController {
       this.#wordleStorage.addScore(stats.score);
     }
 
-    this.#wordleView.render(stats, previousState);
+    this.#wordleView.render(stats, previousStats);
   }
 
   start() {

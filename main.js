@@ -3,7 +3,7 @@ const getRandomWord = () => {
   return words[Math.floor(Math.random() * words.length)];
 };
 
-class WordleStorage {
+class WordleStats {
   #storage;
 
   constructor(storage) {
@@ -35,14 +35,14 @@ const main = () => {
   const secretWord = new SecretWord(getRandomWord());
   const wordle = new Wordle(secretWord, 6);
   const wordleView = new WordleView(page, guessContainer);
-  const wordleStorage = new WordleStorage(localStorage);
+  const wordleStats = new WordleStats(localStorage);
 
   const inputController = new InputController(answerBox);
   const wordleController = new WordleController(
     inputController,
     wordleView,
     wordle,
-    wordleStorage
+    wordleStats
   );
   wordleController.start();
 };
