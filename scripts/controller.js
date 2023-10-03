@@ -10,7 +10,6 @@ class InputController {
       if (event.code === "Enter") {
         const guess = event.target.value.toUpperCase();
         event.target.value = "";
-        if (guess.length !== 5) return;
         onEnter(guess);
       }
     };
@@ -34,22 +33,28 @@ class WordleController {
     this.#wordleStorage = wordleStorage;
   }
 
+  #isInputValid(guess) {
+    return guess.match(/^[a-zA-Z]+/g)[0].split("").length === 5;
+  }
+
   #onEnter(guess) {
-    this.#wordle.play(guess);
-    const stats = this.#wordle.status();
+    if (this.#isInputValid(guess)) {
+      this.#wordle.play(guess);
+      const stats = this.#wordle.status();
 
-    const previousStats = {
-      word: this.#wordleStorage.getWord(),
-      score: this.#wordleStorage.getScore(),
-    };
+      const previousStats = {
+        word: this.#wordleStorage.getWord(),
+        score: this.#wordleStorage.getScore(),
+      };
 
-    if (stats.isGameOver) {
-      this.#inputController.stop();
-      this.#wordleStorage.addWord(stats.secretWord);
-      this.#wordleStorage.addScore(stats.score);
+      if (stats.isGameOver) {
+        this.#inputController.stop();
+        this.#wordleStorage.addWord(stats.secretWord);
+        this.#wordleStorage.addScore(stats.score);
+      }
+
+      this.#wordleView.render(stats, previousStats);
     }
-
-    this.#wordleView.render(stats, previousStats);
   }
 
   start() {
